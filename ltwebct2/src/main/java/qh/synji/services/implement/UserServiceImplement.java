@@ -10,13 +10,13 @@ public class UserServiceImplement implements IUserService {
 	IUserDao userDao = new UserDaoImplement();
 
 	@Override
-	public UserModel findbyUserModel(String username) {
+	public UserModel findByUsername(String username) {
 		return userDao.findByUserName(username);
 	}
 
 	@Override
 	public UserModel login(String username, String password) {
-		UserModel user = this.findbyUserModel(username);
+		UserModel user = this.findByUsername(username);
 		if(user != null && password.equals(user.getPassword())) {
 			return user;
 		}
