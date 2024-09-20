@@ -10,13 +10,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import qh.synji.models.UserModel;
 import qh.synji.services.IUserService;
-import qh.synji.services.implement.UserServiceImplement;
+import qh.synji.services.implement.UserServiceImpl;
 import qh.synji.utils.Constant;
 
 @WebServlet(urlPatterns = { "/login" })
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	IUserService service = new UserServiceImplement();
+	IUserService service = new UserServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

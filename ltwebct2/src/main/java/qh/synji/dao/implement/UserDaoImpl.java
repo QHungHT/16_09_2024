@@ -11,11 +11,12 @@ import qh.synji.configs.DBConnectMySQL;
 import qh.synji.dao.IUserDao;
 import qh.synji.models.UserModel;
 
-public class UserDaoImplement implements IUserDao {
+public class UserDaoImpl implements IUserDao {
 
 	public Connection conn = null;
 	public PreparedStatement ps = null;
 	public ResultSet rs = null;
+
 	@Override
 	public UserModel findByUserName(String username) {
 
@@ -24,9 +25,9 @@ public class UserDaoImplement implements IUserDao {
 			new DBConnectMySQL();
 			conn = DBConnectMySQL.getConnection();
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, username);  //truyền tham số
+			ps.setString(1, username); // truyền tham số
 			rs = ps.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				UserModel user = new UserModel();
 				user.setId(rs.getInt("id"));
 				user.setUsername(rs.getString("username"));
@@ -40,24 +41,23 @@ public class UserDaoImplement implements IUserDao {
 				return user;
 			}
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
-		
-		
+
 		return null;
 	}
-	
+
 	@Override
-	public List<UserModel> findAll()  {
+	public List<UserModel> findAll() {
 		String sql = "Select * from users";
-		List <UserModel> list = new ArrayList<>();
+		List<UserModel> list = new ArrayList<>();
 		try {
 			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				UserModel user = new UserModel();
 				user.setId(rs.getInt("id"));
 				user.setUsername(rs.getString("username"));
@@ -77,28 +77,28 @@ public class UserDaoImplement implements IUserDao {
 		}
 		return null;
 	}
+
 	@Override
 	public void insert(UserModel user) {
-		String sql = "Insert into users(id, username, email, password, fullname, image, roleid, phone, createdate) values (?,?,?,?,?,?,?,?,?)";
+		String sql = "Insert into users(username, email, password, fullname, image, roleid, phone, createdate) values (?,?,?,?,?,?,?,?)";
 		try {
 			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(sql);
 			
-			ps.setInt(1, user.getId());
-			ps.setString(2, user.getUsername());
-			ps.setString(3, user.getEmail());
-			ps.setString(4, user.getPassword());
-			ps.setString(5, user.getFullname());
-			ps.setString(6, user.getImage());
-			ps.setInt(7, user.getRoleid());
-			ps.setString(8, user.getPhone());
-			ps.setDate(9, user.getCreatedate());
-			
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getEmail());
+			ps.setString(3, user.getPassword());
+			ps.setString(4, user.getFullname());
+			ps.setString(5, user.getImage());
+			ps.setInt(6, user.getRoleid());
+			ps.setString(7, user.getPhone());
+			ps.setDate(8, user.getCreatedate());
+
 			ps.executeUpdate();
 
-			
-		} catch (Exception e) {
-			// TODO: handle exception
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -106,22 +106,68 @@ public class UserDaoImplement implements IUserDao {
 
 		try {
 
-			IUserDao userDao = new UserDaoImplement();
+			IUserDao userDao = new UserDaoImpl();
 
 			System.out.println(userDao.findByUserName("hungnq"));
-			
-			UserDaoImplement userDaoImp = new UserDaoImplement();
-			userDaoImp.insert(new UserModel(2, "thuvth", "thuvth@gmail.com", "123", "Võ Thị Hoài Thu", "", 201, "0946683544", java.sql.Date.valueOf("2024-09-16")));
+
+			UserDaoImpl userDaoImp = new UserDaoImpl();
+			userDaoImp.insert(new UserModel(2, "thuvth", "thuvth@gmail.com", "123", "Võ Thị Hoài Thu", "", 201,
+					"0946683544", java.sql.Date.valueOf("2024-09-16")));
 			List<UserModel> list = userDaoImp.findAll();
-			for(UserModel user : list) {
+			for (UserModel user : list) {
 				System.out.println(user);
 			}
-			
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
 
 		}
 
+	}
+
+	@Override
+	public boolean checkExistEmail(String email) {
+		boolean duplicate = false;
+		String query = "select * from [user] where email = ?";
+		try {
+			conn = new DBConnectMySQL().getConnection();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, email);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				duplicate = true;
+			}
+			ps.close();
+			conn.close();
+		} catch (Exception ex) {
+		}
+		return duplicate;
+	}
+
+	@Override
+	public boolean checkExistUsername(String username) {
+		boolean duplicate = false;
+		String query = "select * from [User] where username = ?";
+		try {
+			conn = new DBConnectMySQL().getConnection();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				duplicate = true;
+			}
+			ps.close();
+			conn.close();
+		} catch (Exception ex) {
+		}
+		return duplicate;
+
+	}
+
+	@Override
+	public boolean checkExistPhone(String phone) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

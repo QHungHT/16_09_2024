@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import qh.synji.dao.IUserDao;
-import qh.synji.dao.implement.UserDaoImplement;
+import qh.synji.dao.implement.UserDaoImpl;
 
 public class DBConnectMySQL {
 	private static String USERNAME = "qhung";
