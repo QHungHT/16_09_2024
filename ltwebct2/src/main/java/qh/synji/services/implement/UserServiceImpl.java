@@ -1,5 +1,10 @@
 package qh.synji.services.implement;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import qh.synji.configs.DBConnectMySQL;
 import qh.synji.dao.IUserDao;
 import qh.synji.dao.implement.UserDaoImpl;
 import qh.synji.models.UserModel;
@@ -63,5 +68,23 @@ public class UserServiceImpl implements IUserService {
 
 	public boolean checkExistPhone(String phone) {
 		return userDao.checkExistPhone(phone);
+	}
+
+	@Override
+	public void update(UserModel user) {
+        String query = "UPDATE users SET password = ? WHERE username = ?";
+        try (Connection conn = DBConnectMySQL.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, user.getPassword());  
+            ps.setString(2, user.getUsername());
+            ps.executeUpdate();
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Password updated successfully!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 	}
 }
