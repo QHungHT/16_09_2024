@@ -80,14 +80,14 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public void insert(UserModel user) {
-		String sql = "Insert into users(username, email, password, fullname, image, roleid, phone, createdate) values (?,?,?,?,?,?,?,?)";
+		String sql = "Insert into users(username, password, email,  fullname, image, roleid, phone, createdate) values (?,?,?,?,?,?,?,?)";
 		try {
 			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, user.getUsername());
-			ps.setString(2, user.getEmail());
-			ps.setString(3, user.getPassword());
+			ps.setString(2, user.getPassword());
+			ps.setString(3, user.getEmail());
 			ps.setString(4, user.getFullname());
 			ps.setString(5, user.getImage());
 			ps.setInt(6, user.getRoleid());
@@ -148,7 +148,7 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public boolean checkExistUsername(String username) {
 		boolean duplicate = false;
-		String query = "select * from [User] where username = ?";
+		String query = "select * from users where username = ?";
 		try {
 			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(query);

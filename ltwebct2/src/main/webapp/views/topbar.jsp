@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,8 +23,11 @@
         <c:otherwise>
             <div class="col-sm-6">
                 <ul class="list-inline right-topbar pull-right">
-                    <li><a href="${pageContext.request.contextPath}/member/myaccount">${sessionScope.account.fullName}</a> |
-                    <a href="${pageContext.request.contextPath}/logout">Đăng Xuất</a></li>
+                    <li><a href="${pageContext.request.contextPath}/member/myaccount">${sessionScope.account.fullname}</a> |
+                    <!-- Sử dụng form POST để Đăng Xuất -->
+                    <form action="${pageContext.request.contextPath}/logout" method="post" style="display:inline;">
+                        <button type="submit">Đăng Xuất</button>
+                    </form></li>
                     <li><i class="search fa fa-search search-button"></i></li>
                 </ul>
             </div>

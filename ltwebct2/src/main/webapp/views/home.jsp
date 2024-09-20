@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="/views/topbar.jsp" />
 Day la trang chu cua user
 </body>
 </html>

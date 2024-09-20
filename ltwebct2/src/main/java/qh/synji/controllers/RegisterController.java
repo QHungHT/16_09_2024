@@ -18,24 +18,28 @@ import qh.synji.utils.Constant;
 public class RegisterController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession(false);
-		if (session != null && session.getAttribute("username") != null) {
-			resp.sendRedirect(req.getContextPath() + "/admin");
-			return;
-		}
-	// Check cookie
-	Cookie[] cookies = req.getCookies();if(cookies!=null)
-	{
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("username")) {
-				session = req.getSession(true);
-				session.setAttribute("username", cookie.getValue());
-				resp.sendRedirect(req.getContextPath() + "/admin");
-				return;
-			}
-		}
-	}
-	req.getRequestDispatcher(Constant.REGISTER).forward(req,resp);
+	    HttpSession session = req.getSession(false);
+	    
+	    // Kiểm tra session hiện tại
+	    if (session != null && session.getAttribute("username") != null) {
+	        resp.sendRedirect(req.getContextPath() + "/admin/home");
+	        return;
+	    }
+	    
+	    // Kiểm tra và xóa cookie "username" nếu tồn tại
+	    Cookie[] cookies = req.getCookies();
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if (cookie.getName().equals("username")) {
+	                // Xóa cookie
+	                cookie.setMaxAge(0);
+	                resp.addCookie(cookie);
+	            }
+	        }
+	    }
+
+	    // Chuyển hướng về trang đăng ký
+	    req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
 	}
 
 	@SuppressWarnings("static-access")
