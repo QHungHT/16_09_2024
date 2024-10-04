@@ -13,16 +13,9 @@ public class LogoutController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Lấy phiên làm việc hiện tại
-        HttpSession session = req.getSession(false);
-        
-        // Kiểm tra nếu session tồn tại, thì xóa nó
-        if (session != null) {
-            session.invalidate(); // Hủy session để đăng xuất người dùng
-        }
-        
-        // Chuyển hướng về trang topbar.jsp
-        req.getRequestDispatcher("/views/topbar.jsp").forward(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	HttpSession session = req.getSession();
+    	session.removeAttribute("account");
+    	resp.sendRedirect("home");
     }
 }
